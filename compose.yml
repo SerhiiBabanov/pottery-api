@@ -8,6 +8,7 @@ services:
       dockerfile: "Dockerfile"
     ports:
       - "8761:8761"
+    restart: on-failure
     networks:
       - potterystore
   backend-gateway:
@@ -20,6 +21,9 @@ services:
         - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://service-discovery:8761/eureka
     ports:
       - "8080:8080"
+    restart: on-failure
+    depends_on:
+      - service-discovery
     networks:
       - potterystore
   service-products:
@@ -34,22 +38,24 @@ services:
       - "8081:8081"
     depends_on:
       - database
+      - service-discovery
     restart: on-failure
     networks:
       - potterystore
   database:
     image: postgres:13.0
     build:
-      context: ./service-products
+      context: ./database-image
       dockerfile: "Dockerfile"
-    volumes:
-      - ./postgresql/init.sql:/docker-entrypoint-initdb.d/init.sql
+#    volumes:
+#      - ./postgresql/init.sql:/docker-entrypoint-initdb.d/init.sql
     environment:
       - POSTGRES_USER=postgress
       - POSTGRES_PASSWORD=postgress
       - POSTGRES_DB=potterystore
     ports:
       - "5432:5432"
+    restart: on-failure
     networks:
       - potterystore
 networks:
