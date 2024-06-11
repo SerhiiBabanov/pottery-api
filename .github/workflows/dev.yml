@@ -16,11 +16,11 @@ jobs:
         run: docker compose down
 
       - name: Make gradlew executable
-        run: chmod +x .backend-gateway/gradlew
+        run: chmod +x backend-gateway/gradlew
       - name: Make gradlew executable
-        run: chmod +x .service-discovery/gradlew
+        run: chmod +x service-discovery/gradlew
       - name: Make gradlew executable
-        run: chmod +x .service-products/gradlew
+        run: chmod +x service-products/gradlew
 
       - name: start the docker containers
         run: docker compose up --build -d
