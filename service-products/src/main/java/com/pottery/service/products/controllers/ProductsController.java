@@ -12,6 +12,6 @@ public class ProductsController {
 
     @GetMapping
     public String getProducts() {
-        return "You in products controller!";
+        return "You in products controller!!!";
     }
 }
