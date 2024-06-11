@@ -1,7 +1,6 @@
 FROM bellsoft/liberica-openjdk-alpine:17-x86_64 AS build
 WORKDIR /app
 COPY . .
-RUN sh 'chmod +x ./gradlew'
 RUN ./gradlew clean build
 
 FROM bellsoft/liberica-openjdk-alpine:17-x86_64
