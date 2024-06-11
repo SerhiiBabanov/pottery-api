@@ -15,5 +15,12 @@ jobs:
       - name: shutdown any running containers
         run: docker compose down
 
+      - name: Make gradlew executable
+        run: chmod +x .backend-gateway/gradlew
+      - name: Make gradlew executable
+        run: chmod +x .service-discovery/gradlew
+      - name: Make gradlew executable
+        run: chmod +x .service-products/gradlew
+
       - name: start the docker containers
         run: docker compose up --build -d
