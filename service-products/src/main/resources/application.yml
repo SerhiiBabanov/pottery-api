@@ -1,7 +1,5 @@
 server:
   port: 0
-  servlet:
-    context-path: /products
 
 management:
   health:
@@ -13,13 +11,10 @@ management:
 spring:
   application.name: service-products
   datasource:
-    url: jdbc:postgresql://localhost:5432/potterystore
+    url: ${DATABASE_URL}
     username: service_products
     password: srv-pds
     driver-class-name: org.postgresql.Driver
-  sql:
-    init:
-      mode: always
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     show-sql: false
@@ -32,8 +27,15 @@ spring:
       indent-output: false
       write-dates-as-timestamps: false
       write-bigdecimal-as-plain: true
+  data:
+    web:
+      pageable:
+        default-page-size: 12
+        max-page-size: 24
 
 eureka:
   client:
     serviceUrl:
       defaultZone: http://localhost:8761/eureka
+  instance:
+    prefer-ip-address: true

@@ -18,6 +18,18 @@ spring:
           uri: lb://service-products
           predicates:
             - Path=/products/**
+        - id: service-colors-id
+          uri: lb://service-products
+          predicates:
+            - Path=/colors/**
+        - id: service-categories-id
+          uri: lb://service-products
+          predicates:
+            - Path=/categories/**
+        - id: service-collections-id
+          uri: lb://service-products
+          predicates:
+            - Path=/collections/**
 
 eureka:
   client:
