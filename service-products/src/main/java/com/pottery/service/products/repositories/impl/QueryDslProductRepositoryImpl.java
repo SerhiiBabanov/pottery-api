@@ -26,16 +26,33 @@ public class QueryDslProductRepositoryImpl implements QueryDslProductRepository 
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Page<ProductShortDto> getProductViews(List<Long> categoryIds,
-                                                 List<Long> colorIds,
-                                                 List<Long> collectionIds,
-                                                 BigDecimal minPrice, BigDecimal maxPrice,
-                                                 Boolean isAvailable,
-                                                 String sort,
-                                                 Pageable pageable) {
+    public List<ProductShortDto> getRecommendedProducts(Product target) {
+        QProduct product = new QProduct("product");
+        return queryFactory
+                .select(new QProductShortDto(
+                        product.id,
+                        product.name,
+                        product.images,
+                        product.catalogPrice,
+                        product.discountCatalogPrice
+                ))
+                .from(product)
+                .where(product.category.eq(target.getCategory()))
+                .limit(6)
+                .fetch();
+    }
+
+    @Override
+    public Page<ProductShortDto> getProductsByFilter(List<Long> categoryIds,
+                                                     List<Long> colorIds,
+                                                     List<Long> collectionIds,
+                                                     BigDecimal minPrice, BigDecimal maxPrice,
+                                                     Boolean isAvailable,
+                                                     String sort,
+                                                     Pageable pageable) {
         QProduct product = new QProduct("product");
 
-        BooleanExpression[] expressions = {
+        BooleanExpression[] filters = {
                 categoryIdIn(categoryIds),
                 colorIdIn(colorIds),
                 collectionIdIn(collectionIds),
@@ -44,7 +61,7 @@ public class QueryDslProductRepositoryImpl implements QueryDslProductRepository 
                 isAvailable(isAvailable)
         };
 
-        JPAQuery<ProductShortDto> query = queryFactory
+        JPAQuery<ProductShortDto> filterQuery = queryFactory
                 .select(
                         new QProductShortDto(
                                 product.id,
@@ -56,17 +73,17 @@ public class QueryDslProductRepositoryImpl implements QueryDslProductRepository 
                 )
                 .from(product)
                 .where(
-                        expressions
+                        filters
                 )
                 .orderBy(getSortedColumn(pageable));
 
-        List<ProductShortDto> products = query.fetch();
+        List<ProductShortDto> products = filterQuery.fetch();
 
         JPAQuery<Long> countQuery = queryFactory
                 .select(product.count())
                 .from(product)
                 .where(
-                        expressions
+                        filters
                 );
 
         return PageableExecutionUtils.getPage(products, pageable,
