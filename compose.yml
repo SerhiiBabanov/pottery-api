@@ -33,6 +33,7 @@ services:
       context: ./service-products
       dockerfile: "Dockerfile"
     environment:
+      - DATABASE_URL=jdbc:postgresql://database:5432/potterystore
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://service-discovery:8761/eureka
     ports:
       - "8081:8081"
@@ -47,8 +48,6 @@ services:
     build:
       context: ./database-image
       dockerfile: "Dockerfile"
-#    volumes:
-#      - ./postgresql/init.sql:/docker-entrypoint-initdb.d/init.sql
     environment:
       - POSTGRES_USER=postgress
       - POSTGRES_PASSWORD=postgress
