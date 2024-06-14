@@ -37,7 +37,10 @@ public class QueryDslProductRepositoryImpl implements QueryDslProductRepository 
                         product.discountCatalogPrice
                 ))
                 .from(product)
-                .where(product.category.eq(target.getCategory()))
+                .where(
+                        product.category.eq(target.getCategory()),
+                        product.id.ne(target.getId())
+                )
                 .limit(6)
                 .fetch();
     }
@@ -48,7 +51,6 @@ public class QueryDslProductRepositoryImpl implements QueryDslProductRepository 
                                                      List<Long> collectionIds,
                                                      BigDecimal minPrice, BigDecimal maxPrice,
                                                      Boolean isAvailable,
-                                                     String sort,
                                                      Pageable pageable) {
         QProduct product = new QProduct("product");
 
@@ -138,13 +140,17 @@ public class QueryDslProductRepositoryImpl implements QueryDslProductRepository 
                 .or(product.discountCatalogPrice.isNull().and(product.catalogPrice.loe(maxPrice)));
     }
 
-    private BooleanExpression isAvailable(boolean isAvailable) {
-        if (!isAvailable) {
+    private BooleanExpression isAvailable(Boolean isAvailable) {
+        if (isAvailable == null) {
             return null;
         }
 
         QProduct product = new QProduct("product");
-        return product.properties.any().quantity.gt(0);
+        if (isAvailable) {
+            return product.properties.any().quantity.gt(0);
+        } else {
+            return product.properties.any().quantity.eq(0);
+        }
     }
 
     private OrderSpecifier<?>[] getSortedColumn(Pageable pageable) {

@@ -29,11 +29,10 @@ public class ProductController {
                                              @RequestParam(required = false) BigDecimal minPrice,
                                              @RequestParam(required = false) BigDecimal maxPrice,
                                              @RequestParam(required = false) boolean isAvailable,
-                                             @RequestParam(required = false) String sort,
                                              Pageable pageable
                                              ) {
         return productService.getByFilters(categoryIds, colorIds, collectionIds, minPrice, maxPrice,
-                isAvailable, sort, pageable);
+                isAvailable, pageable);
     }
 
     @GetMapping("{id}")

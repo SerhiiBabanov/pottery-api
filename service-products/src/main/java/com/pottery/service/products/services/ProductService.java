@@ -18,15 +18,16 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 public class ProductService {
+
     private final ProductRepository productRepository;
 
     public Page<ProductShortDto> getByFilters(List<Long> categoryIds,
                                               List<Long> colorIds,
                                               List<Long> collectionIds,
                                               BigDecimal minPrice, BigDecimal maxPrice,
-                                              Boolean isAvailable, String sort, Pageable pageable) {
+                                              Boolean isAvailable, Pageable pageable) {
         return productRepository.getProductsByFilter(categoryIds, colorIds, collectionIds,
-                minPrice, maxPrice, isAvailable, sort, pageable);
+                minPrice, maxPrice, isAvailable, pageable);
     }
 
     public Product getById(Long productId) {

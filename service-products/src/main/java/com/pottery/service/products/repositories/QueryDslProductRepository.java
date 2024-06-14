@@ -11,6 +11,6 @@ import java.util.List;
 public interface QueryDslProductRepository {
     Page<ProductShortDto> getProductsByFilter(List<Long> categoryIds, List<Long> colorIds, List<Long> collectionIds,
                                               BigDecimal minPrice, BigDecimal maxPrice, Boolean isAvailable,
-                                              String sort, Pageable pageable);
+                                              Pageable pageable);
     List<ProductShortDto> getRecommendedProducts(Product product);
 }
