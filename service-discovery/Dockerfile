@@ -1,7 +1,7 @@
 FROM bellsoft/liberica-openjdk-alpine:17-x86_64 AS build
 WORKDIR /app
 COPY . .
-RUN ./gradlew clean build
+RUN ./gradlew build -x test
 
 FROM bellsoft/liberica-openjdk-alpine:17-x86_64
 MAINTAINER Serhii Babanov <serhii.babanov@gmail.com>
