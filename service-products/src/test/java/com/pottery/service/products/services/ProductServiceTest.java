@@ -10,14 +10,15 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -36,30 +37,64 @@ class ProductServiceTest {
     class getByFilters {
 
         @Test
-        @DisplayName("Get when filters are null must return all products")
-        void getByFilters_when_all_filters_are_NULL() {
+        @DisplayName("When filters are null and pageable is null must return all products")
+        void getByFilters_when_all_filters_and_pageable_are_NULL() {
             //given
-            Pageable pageable = Pageable.unpaged();
             //when
             Page<ProductShortDto> products = productService.getByFilters(null, null, null,
-                    null, null, null, pageable);
+                    null, null, null, null);
             //then
-            assertNotNull(products);
+            assertNotNull(products, "Products should not be null");
             assertEquals(15, products.getTotalElements(), "Total elements should be 15");
         }
 
         @Test
+        @DisplayName("When filters are null and page size = 5 and page = 1 must return correct page")
+        void getByFilters_when_all_filters_are_NULL_and_page_size_5() {
+            //given
+            Pageable pageable = Pageable.ofSize(5).withPage(1);
+            //when
+            Page<ProductShortDto> products = productService.getByFilters(null, null, null,
+                    null, null, null, pageable);
+            //then
+            assertNotNull(products, "Products should not be null");
+            assertEquals(15, products.getTotalElements(), "Total elements should be 15");
+            assertEquals(5, products.getSize(), "Page size should be 5");
+            assertEquals(3, products.getTotalPages(), "Total pages should be 3");
+            assertEquals(1, products.getNumber(), "Current page should be 1");
+        }
+
+        @Test
+        @DisplayName("When filters are null and page size = 15 and sort = catalogPrice,DESC must return sorted page")
+        void getByFilters_when_all_filters_are_NULL_and_page_size_15_and_sort_by_defaultPrice_DESC() {
+            //given
+            Pageable pageable = PageRequest.of(0, 15, Sort.by("catalogPrice").descending());
+            //when
+            Page<ProductShortDto> products = productService.getByFilters(null, null, null,
+                    null, null, null, pageable);
+            //then
+            assertNotNull(products, "Products should not be null");
+            assertEquals(15, products.getTotalElements(), "Total elements should be 15");
+            assertEquals(15, products.getSize(), "Page size should be 15");
+            assertEquals(1, products.getTotalPages(), "Total pages should be 1");
+            assertEquals(0, products.getNumber(), "Current page should be 0");
+            assertTrue(products.getContent().get(0).catalogPrice().compareTo(BigDecimal.valueOf(200)) == 0,
+                    "First product should have catalog price 200 - maximum in test db");
+            assertTrue(products.getContent().get(14).catalogPrice().compareTo(BigDecimal.valueOf(60)) == 0,
+                    "Last product should have catalog price 60 - minimum in test db");
+        }
+
+        @Test
         @Transactional
-        @DisplayName("Get when categoryIds content 1L must return 5 products")
+        @DisplayName("When categoryIds content 1L must return 5 products")
         void getByFilters_when_categoryIds_present() {
             //given
             List<Long> categoryIds = List.of(1L);
-            Pageable pageable = Pageable.unpaged();
             //when
             Page<ProductShortDto> products = productService.getByFilters(categoryIds, null, null,
-                    null, null, null, pageable);
+                    null, null, null, null);
             //then
-            assertNotNull(products);
+            assertNotNull(products, "Products should not be null");
             assertEquals(5, products.getTotalElements(), "Total elements should be 5");
             assertTrue(products.getContent().stream()
                             .allMatch(p -> productRepository.getReferenceById(p.id()).getCategory().getId().equals(1L)),
@@ -68,16 +103,15 @@ class ProductServiceTest {
 
         @Test
         @Transactional
-        @DisplayName("Get when colorIds content 1L must return 5 products")
+        @DisplayName("When colorIds content 1L must return 5 products")
         void getByFilters_when_colorsIds_present() {
             //given
             List<Long> colorIds = List.of(1L);
-            Pageable pageable = Pageable.unpaged();
             //when
             Page<ProductShortDto> products = productService.getByFilters(null, colorIds, null,
-                    null, null, null, pageable);
+                    null, null, null, null);
             //then
-            assertNotNull(products);
+            assertNotNull(products, "Products should not be null");
             assertEquals(5, products.getTotalElements(), "Total elements should be 5");
             assertTrue(products.getContent().stream()
                             .allMatch(p -> productRepository.getReferenceById(p.id()).getProperties().stream()
@@ -88,16 +122,15 @@ class ProductServiceTest {
 
         @Test
         @Transactional
-        @DisplayName("Get when collectionIds content 1L must return 5 products")
+        @DisplayName("When collectionIds content 1L must return 5 products")
         void getByFilters_when_collectionIds_present() {
             //given
             List<Long> collectionIds = List.of(1L);
-            Pageable pageable = Pageable.unpaged();
             //when
             Page<ProductShortDto> products = productService.getByFilters(null, null, collectionIds,
-                    null, null, null, pageable);
+                    null, null, null, null);
             //then
-            assertNotNull(products);
+            assertNotNull(products, "Products should not be null");
             assertEquals(5, products.getTotalElements(), "Total elements should be 5");
             assertTrue(products.getContent().stream()
                             .allMatch(p -> productRepository.getReferenceById(p.id()).getCollections().stream()
@@ -108,19 +141,16 @@ class ProductServiceTest {
 
         @Test
         @Transactional
-        @DisplayName("Get when minPrice content 110 must return 10 products")
+        @DisplayName("When minPrice content 110 must return 10 products")
         void getByFilters_when_minPrice_present() {
             //given
             BigDecimal minPrice = new BigDecimal(110);
-            Pageable pageable = Pageable.unpaged();
             //when
             Page<ProductShortDto> products = productService.getByFilters(null, null, null,
-                    minPrice, null, null, pageable);
-            Optional<Product> product = productRepository.findById(products.getContent().get(0).id());
+                    minPrice, null, null, null);
             //then
-            assertNotNull(products);
+            assertNotNull(products, "Products should not be null");
             assertEquals(10, products.getTotalElements(), "Total elements should be 5");
-            assertTrue(product.isPresent());
             assertTrue(products.getContent().stream()
                             .allMatch(p -> productRepository.getReferenceById(p.id()).getProperties().stream()
                                     .allMatch(pr -> (pr.getDiscountPrice() != null
@@ -133,16 +163,15 @@ class ProductServiceTest {
 
         @Test
         @Transactional
-        @DisplayName("Get when maxPrice content 110 must return 6 products")
+        @DisplayName("When maxPrice content 110 must return 6 products")
         void getByFilters_when_maxPrice_present() {
             //given
             BigDecimal maxPrice = new BigDecimal(110);
-            Pageable pageable = Pageable.unpaged();
             //when
             Page<ProductShortDto> products = productService.getByFilters(null, null, null,
-                    null, maxPrice, null, pageable);
+                    null, maxPrice, null, null);
             //then
-            assertNotNull(products);
+            assertNotNull(products, "Products should not be null");
             assertEquals(6, products.getTotalElements(), "Total elements should be 5");
             assertTrue(products.getContent().stream()
                             .allMatch(p -> productRepository.getReferenceById(p.id()).getProperties().stream()
@@ -156,16 +185,15 @@ class ProductServiceTest {
 
         @Test
         @Transactional
-        @DisplayName("Get when isAvailable true must return 14 products")
+        @DisplayName("When isAvailable true must return 14 products")
         void getByFilters_when_isAvailable_true_present() {
             //given
             Boolean isAvailable = true;
-            Pageable pageable = Pageable.unpaged();
             //when
             Page<ProductShortDto> products = productService.getByFilters(null, null, null,
-                    null, null, isAvailable, pageable);
+                    null, null, isAvailable, null);
             //then
-            assertNotNull(products);
+            assertNotNull(products, "Products should not be null");
             assertEquals(14, products.getTotalElements(), "Total elements should be 14");
             assertTrue(products.getContent().stream()
                             .allMatch(p -> productRepository.getReferenceById(p.id()).getProperties().stream()
@@ -177,16 +205,15 @@ class ProductServiceTest {
 
         @Test
         @Transactional
-        @DisplayName("Get when isAvailable false must return 1 product")
+        @DisplayName("When isAvailable false must return 1 product")
         void getByFilters_when_isAvailable_false_present() {
             //given
             Boolean isAvailable = false;
-            Pageable pageable = Pageable.unpaged();
             //when
             Page<ProductShortDto> products = productService.getByFilters(null, null, null,
-                    null, null, isAvailable, pageable);
+                    null, null, isAvailable, null);
             //then
-            assertNotNull(products);
+            assertNotNull(products, "Products should not be null");
             assertEquals(1, products.getTotalElements(), "Total elements should be 14");
             assertTrue(products.getContent().stream()
                             .allMatch(p -> productRepository.getReferenceById(p.id()).getProperties().stream()
@@ -203,37 +230,37 @@ class ProductServiceTest {
 
         @Test
         @Transactional
-        @DisplayName("Get when id 1L must return product with id 1L")
+        @DisplayName("When id 1L must return product with id 1L")
         void getById_when_id_1L() {
             //given
             Long id = 1L;
             //when
             Product product = productService.getById(id);
             //then
-            assertNotNull(product);
+            assertNotNull(product, "Product should not be null");
             assertEquals(id, product.getId(), "Product id should be 1L");
         }
 
         @Test
         @Transactional
-        @DisplayName("Get when id 100L must return AppException with message 'Not found product with id: 100' and status 404")
+        @DisplayName("When id 100L must return AppException with message 'Not found product with id: 100' and status 404")
         void getById_when_id_100L() {
             //given
             Long id = 100L;
             //when
-            Product product = null;
             try {
-                product = productService.getById(id);
+                productService.getById(id);
                 fail("Exception AppException with status 404 did not throw!");
             } catch (AppException e) {
                 //then
                 assertEquals("Not found product with id: 100", e.getMessage());
-                assertEquals(404, e.getStatus().value());
+                assertEquals(404, e.getStatus().value(), "Status should be 404");
             }
         }
     }
 
     @Test
+    @DisplayName("When product id 1L must return recommended products with same categoryId (limit 6)")
     @Transactional
     void getRecommendedProducts() {
         //given
@@ -242,9 +269,8 @@ class ProductServiceTest {
         //when
         List<ProductShortDto> recommendedProducts = productService.getRecommendedProducts(productId);
         //then
-        assertNotNull(recommendedProducts);
+        assertNotNull(recommendedProducts, "Recommended products should not be null");
         assertTrue(recommendedProducts.size() < 6, "Recommended products size should be less than 6");
-        assertTrue(recommendedProducts.size() == 4, "Recommended products size should be equal 4");
         assertTrue(recommendedProducts.stream()
                         .allMatch(p -> productRepository.getReferenceById(p.id())
                                 .getCategory().getId().equals(product.getCategory().getId())

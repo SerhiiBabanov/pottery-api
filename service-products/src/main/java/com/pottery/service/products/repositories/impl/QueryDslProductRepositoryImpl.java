@@ -76,8 +76,14 @@ public class QueryDslProductRepositoryImpl implements QueryDslProductRepository 
                 .from(product)
                 .where(
                         filters
-                )
-                .orderBy(getSortedColumn(pageable));
+                );
+
+        if (pageable != null) {
+            filterQuery
+                    .orderBy(getSortedColumn(pageable))
+                    .offset(pageable.getOffset())
+                    .limit(pageable.getPageSize());
+        }
 
         List<ProductShortDto> products = filterQuery.fetch();
 
@@ -88,6 +94,7 @@ public class QueryDslProductRepositoryImpl implements QueryDslProductRepository 
                         filters
                 );
 
+        pageable = pageable != null ? pageable : Pageable.unpaged();
         return PageableExecutionUtils.getPage(products, pageable,
                 countQuery::fetchOne);
 
@@ -154,7 +161,7 @@ public class QueryDslProductRepositoryImpl implements QueryDslProductRepository 
     }
 
     private OrderSpecifier<?>[] getSortedColumn(Pageable pageable) {
-        return pageable.getSort().stream()
+        OrderSpecifier[] sorting = pageable.getSort().stream()
                 .map(o -> {
                     PathBuilder<Product> orderByExpression = new PathBuilder<>(Product.class, "product");
 
@@ -162,6 +169,7 @@ public class QueryDslProductRepositoryImpl implements QueryDslProductRepository 
                             : com.querydsl.core.types.Order.DESC, orderByExpression.get(o.getProperty()));
                 })
                 .toArray(OrderSpecifier[]::new);
+        return sorting.length != 0 ? sorting : new OrderSpecifier[]{new QProduct("product").id.asc()};
     }
 
 }

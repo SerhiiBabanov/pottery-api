@@ -28,7 +28,7 @@ public class ProductController {
                                              @RequestParam(required = false) List<Long> collectionIds,
                                              @RequestParam(required = false) BigDecimal minPrice,
                                              @RequestParam(required = false) BigDecimal maxPrice,
-                                             @RequestParam(required = false) boolean isAvailable,
+                                             @RequestParam(required = false) Boolean isAvailable,
                                              Pageable pageable
                                              ) {
         return productService.getByFilters(categoryIds, colorIds, collectionIds, minPrice, maxPrice,
