@@ -2,14 +2,12 @@ package com.pottery.service.products.controllers;
 
 import com.pottery.service.products.dtos.ProductDto;
 import com.pottery.service.products.dtos.ProductShortDto;
-import com.pottery.service.products.exceptions.AppException;
 import com.pottery.service.products.mappers.ProductMapper;
 import com.pottery.service.products.services.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -31,19 +29,19 @@ public class ProductController {
                                              @RequestParam(required = false) BigDecimal minPrice,
                                              @RequestParam(required = false) BigDecimal maxPrice,
                                              @RequestParam(required = false) boolean isAvailable,
-                                             @RequestParam(required = false) String sort,
                                              Pageable pageable
                                              ) {
         return productService.getByFilters(categoryIds, colorIds, collectionIds, minPrice, maxPrice,
-                isAvailable, sort, pageable);
+                isAvailable, pageable);
     }
 
     @GetMapping("{id}")
     public ProductDto getProduct(@PathVariable Long id) {
-        return productService.getById(id).map(productMapper::toDto)
-                .orElseThrow(() -> {
-                    log.error("Product with id {} not found", id);
-                    return new AppException("Not found product with id: " + id, HttpStatus.NOT_FOUND);
-                });
+        return productMapper.toDto(productService.getById(id));
+    }
+
+    @GetMapping("{id}/recommended")
+    public List<ProductShortDto> getRecommendedProducts(@PathVariable Long id) {
+        return productService.getRecommendedProducts(id);
     }
 }
