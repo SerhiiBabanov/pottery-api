@@ -15,7 +15,7 @@ import static org.hamcrest.Matchers.*;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Testcontainers
 @ActiveProfiles("test-containers-flyway")
-class MaterialControllerTest {
+class ColorControllerIntegrationTest {
 
     @LocalServerPort
     protected Integer port;
@@ -26,12 +26,12 @@ class MaterialControllerTest {
     }
 
     @Test
-    @DisplayName("GET /api/materials")
-    void get_materials_should_return_all_materials() {
+    @DisplayName("GET /api/colors")
+    void get_colors_should_return_all_colors() {
         given()
                 .contentType(ContentType.JSON)
                 .when()
-                .get("/api/materials")
+                .get("/api/colors")
                 .then()
                 .statusCode(200)
                 .body(".", hasSize(3))
