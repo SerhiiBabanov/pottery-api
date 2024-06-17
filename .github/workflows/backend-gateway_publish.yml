@@ -16,7 +16,7 @@ jobs:
       - name: Make gradlew executable
         run: chmod +x backend-gateway/gradlew
       - name: Execute Gradle build
-        run: backend-gateway/gradlew build
+        run: ./backend-gateway/gradlew build
 
   docker:
     needs: test_build
