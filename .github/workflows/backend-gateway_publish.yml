@@ -17,7 +17,7 @@ jobs:
           ref: dev
           appdir: "backend-gateway"
       - name: Make gradlew executable
-        run: chmod +x backend-gateway/gradlew
+        run: chmod +x ./gradlew
       - name: Execute Gradle build
         run: ./gradlew build
 
