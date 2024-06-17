@@ -10,7 +10,7 @@ services:
       - "8761:8761"
     restart: on-failure
     networks:
-      - potterystore
+      - pottery_store
   backend-gateway:
     image: "backend-gateway"
     container_name: "backend-gateway"
@@ -25,7 +25,7 @@ services:
     depends_on:
       - service-discovery
     networks:
-      - potterystore
+      - pottery_store
   service-products:
     image: "service-products"
     container_name: "service-products"
@@ -42,7 +42,7 @@ services:
       - service-discovery
     restart: on-failure
     networks:
-      - potterystore
+      - pottery_store
   database:
     image: postgres:13.0
     build:
@@ -56,6 +56,20 @@ services:
       - "5432:5432"
     restart: on-failure
     networks:
-      - potterystore
+      - pottery_store
+  docs:
+    image: "docs"
+    container_name: "docs"
+    build:
+      context: ./docs
+      dockerfile: "Dockerfile"
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://service-discovery:8761/eureka
+    ports:
+      - "8082:8082"
+    depends_on:
+      - service-products
+    networks:
+      - pottery_store
 networks:
-  potterystore:
+  pottery_store:

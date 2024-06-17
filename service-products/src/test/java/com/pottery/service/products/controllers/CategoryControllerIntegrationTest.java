@@ -26,36 +26,19 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.restassured.RestAssuredRestDocumentation.document;
 import static org.springframework.restdocs.restassured.RestAssuredRestDocumentation.documentationConfiguration;
 
-@ExtendWith({RestDocumentationExtension.class})
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@Testcontainers
-@ActiveProfiles("test-containers-flyway")
-class CategoryControllerIntegrationTest {
+//@ExtendWith({RestDocumentationExtension.class})
+//@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+//@Testcontainers
+//@ActiveProfiles("test-containers-flyway")
+class CategoryControllerIntegrationTest extends BaseIntegrationDocumentationTest {
 
     @LocalServerPort
     protected Integer port;
 
-    @Value("${dev-server.host}")
-    private String devServerHost;
-    @Value("${dev-server.scheme}")
-    private String devServerScheme;
-
-    private RequestSpecification documentationSpec;
-
     @BeforeEach
     void setUp(RestDocumentationContextProvider restDocumentation) {
         RestAssured.baseURI = "http://localhost:" + port;
-        this.documentationSpec = new RequestSpecBuilder()
-                .addFilter(documentationConfiguration(restDocumentation)
-                        .operationPreprocessors()
-                        .withRequestDefaults(prettyPrint())
-                        .withResponseDefaults(prettyPrint()))
-                .addFilter(document("categories", preprocessRequest(
-                        modifyUris()
-                                .scheme(devServerScheme)
-                                .host(devServerHost)
-                                .removePort())))
-                .build();
+        setDocumentationSpec(restDocumentation, "categories");
     }
 
     @Test
