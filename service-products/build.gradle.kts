@@ -2,6 +2,7 @@ plugins {
 	java
 	id("org.springframework.boot") version "3.3.0"
 	id("io.spring.dependency-management") version "1.1.5"
+	id("org.asciidoctor.jvm.convert") version "3.3.2"
 	kotlin("jvm") version "1.9.20"
 	kotlin("plugin.spring") version "1.9.20"
 	kotlin("plugin.jpa") version "1.9.20"
@@ -10,6 +11,10 @@ plugins {
 
 group = "com.pottery"
 version = "0.0.1-SNAPSHOT"
+
+val asciidoctorExtensions by configurations.creating
+
+
 
 java {
 	toolchain {
@@ -26,8 +31,12 @@ repositories {
 }
 
 extra["springCloudVersion"] = "2023.0.2"
+extra["snippetsDir"] = file("build/generated-snippets")
+
 
 dependencies {
+	asciidoctorExtensions("io.spring.asciidoctor.backends:spring-asciidoctor-backends:0.0.7")
+
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.springframework.boot:spring-boot-starter-web")
@@ -45,6 +54,8 @@ dependencies {
 	testImplementation("org.testcontainers:postgresql")
 	testImplementation("org.testcontainers:junit-jupiter")
 	testImplementation("io.rest-assured:rest-assured")
+	testImplementation("org.springframework.restdocs:spring-restdocs-restassured")
+	implementation("org.springframework.restdocs:spring-restdocs-asciidoctor")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 	annotationProcessor("org.projectlombok:lombok")
 	annotationProcessor("org.mapstruct:mapstruct-processor:1.5.5.Final")
@@ -59,4 +70,23 @@ dependencyManagement {
 
 tasks.withType<Test> {
 	useJUnitPlatform()
+}
+
+
+tasks.named("asciidoctor", org.asciidoctor.gradle.jvm.AsciidoctorTask::class) {
+	// apply the spring-html backend
+	configurations("asciidoctorExtensions")
+	outputOptions {
+		backends("spring-html")
+	}
+	baseDirFollowsSourceDir()
+	inputs.dir("build/generated-snippets")
+	sources("**/index.adoc")
+	attributes(
+		mapOf(
+			"snippets" to file("build/generated-snippets"),
+			"sourceDirectory" to "src/docs/asciidoc",
+			"revnumber" to project.version
+		)
+	)
 }

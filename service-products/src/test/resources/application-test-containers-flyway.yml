@@ -11,3 +11,7 @@ spring:
 eureka:
   client:
     enabled: false
+
+dev-server:
+  scheme: http
+  host: www.logicnsolution.com
