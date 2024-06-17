@@ -39,5 +39,5 @@ tasks.withType<Test> {
 }
 
 tasks.bootBuildImage {
-	imageName = "backend-gateway"
+	imageName = "serhiibabanov/backend-gateway"
 }
