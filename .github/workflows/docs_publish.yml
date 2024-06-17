@@ -1,8 +1,8 @@
-name: build and run pottery-api
+name: publish docs
 on:
   push:
-    branches:
-      - dev
+    branches: [ 'dev' ]
+    paths: [ 'docs/**' ]
 
 jobs:
   generate_docs:
@@ -26,7 +26,7 @@ jobs:
       - name: Make gradlew executable
         run: chmod +x ./gradlew
         working-directory: docs
-      - name: Generate snippets
+      - name: Generate docs
         run: ./gradlew asciidoctor
         working-directory: docs
         #publish docs
