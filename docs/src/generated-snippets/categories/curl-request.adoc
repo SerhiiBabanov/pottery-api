@@ -1,0 +1,5 @@
+[source,bash]
+----
+$ curl 'http://www.logicnsolution.com/api/categories' -i -X GET \
+    -H 'Content-Type: application/json'
+----

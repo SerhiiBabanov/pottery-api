@@ -1,0 +1,41 @@
+name: build and run pottery-api
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+  generate_docs:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          ref: dev
+        #generate and copy snippets from service-products
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
+        working-directory: service-products
+      - name: Execute Gradle tests
+        run: ./gradlew test
+        working-directory: service-products
+      - name: Copy generated-snippets
+        run: cp -r service-products/build/generated-snippets docs/src/generated-snippets
+        working-directory: service-products
+        #generate docs
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
+        working-directory: docs
+      - name: Generate snippets
+        run: ./gradlew asciidoctor
+        working-directory: docs
+        #publish docs
+      - name: Execute Gradle bootBuildImage
+        run: ./gradlew bootBuildImage
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Push Docker image to Docker Hub
+        run: docker push serhiibabanov/docs:latest

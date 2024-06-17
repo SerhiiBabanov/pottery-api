@@ -1,0 +1,21 @@
+[source,http,options="nowrap"]
+----
+HTTP/1.1 200 OK
+Content-Type: application/json
+Transfer-Encoding: chunked
+Date: Mon, 17 Jun 2024 01:24:52 GMT
+Keep-Alive: timeout=60
+Connection: keep-alive
+Content-Length: 119
+
+[ {
+  "id" : 1,
+  "name" : "Vases"
+}, {
+  "id" : 2,
+  "name" : "Cups"
+}, {
+  "id" : 3,
+  "name" : "Dishes"
+} ]
+----
