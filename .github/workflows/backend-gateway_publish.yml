@@ -1,8 +1,8 @@
-name: build and run pottery-api
+name: publish backend-gateway
 on:
   push:
-    branches:
-      - dev
+    branches: ['dev']
+    paths: ['backend-gateway/**']
 
 jobs:
   test_build:
