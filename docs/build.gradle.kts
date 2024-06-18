@@ -67,3 +67,4 @@ tasks.bootBuildImage {
     dependsOn("bootJar")
     imageName = "serhiibabanov/backend-gateway"
 }
+

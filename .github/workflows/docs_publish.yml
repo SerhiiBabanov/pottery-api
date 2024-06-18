@@ -20,7 +20,7 @@ jobs:
         run: ./gradlew test
         working-directory: service-products
       - name: Copy generated-snippets
-        run: cp -f service-products/build/generated-snippets/* docs/src/generated-snippets/
+        run: cp -rf service-products/build/generated-snippets/* docs/src/generated-snippets/
         #generate docs
       - name: Make gradlew executable
         run: chmod +x ./gradlew
