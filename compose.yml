@@ -35,7 +35,7 @@ services:
     networks:
       - pottery_store
   database:
-    image: postgres:13.0
+    container_name: "database"
     build:
       context: ./database-image
       dockerfile: "Dockerfile"
