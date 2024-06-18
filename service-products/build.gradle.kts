@@ -12,10 +12,6 @@ plugins {
 group = "com.pottery"
 version = "0.0.1-SNAPSHOT"
 
-val asciidoctorExtensions by configurations.creating
-
-
-
 java {
 	toolchain {
 		languageVersion = JavaLanguageVersion.of(17)
@@ -35,8 +31,6 @@ extra["snippetsDir"] = file("build/generated-snippets")
 
 
 dependencies {
-	asciidoctorExtensions("io.spring.asciidoctor.backends:spring-asciidoctor-backends:0.0.7")
-
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.springframework.boot:spring-boot-starter-web")
@@ -73,20 +67,6 @@ tasks.withType<Test> {
 }
 
 
-tasks.named("asciidoctor", org.asciidoctor.gradle.jvm.AsciidoctorTask::class) {
-	// apply the spring-html backend
-	configurations("asciidoctorExtensions")
-	outputOptions {
-		backends("spring-html")
-	}
-	baseDirFollowsSourceDir()
-	inputs.dir("build/generated-snippets")
-	sources("**/index.adoc")
-	attributes(
-		mapOf(
-			"snippets" to file("build/generated-snippets"),
-			"sourceDirectory" to "src/docs/asciidoc",
-			"revnumber" to project.version
-		)
-	)
+tasks.bootBuildImage {
+	imageName = "serhiibabanov/service-products"
 }
