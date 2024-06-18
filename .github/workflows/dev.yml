@@ -1,25 +1,19 @@
-name: build and run pottery-api
-on: workflow_dispatch
+name: Deploy on self-hosted runner
+on:
+  workflow_dispatch:
+    branches: ['dev']
 
 jobs:
-  build-deploy:
-    name: build and deploy spring-api
-    runs-on: self-hosted
-    steps:
-      - name: checkout code
-        uses: actions/checkout@v3
-        with:
-          ref: dev
-
-      - name: shutdown any running containers
-        run: docker compose down
-
-      - name: Make gradlew executable
-        run: chmod +x backend-gateway/gradlew
-      - name: Make gradlew executable
-        run: chmod +x service-discovery/gradlew
-      - name: Make gradlew executable
-        run: chmod +x service-products/gradlew
-
-      - name: start the docker containers
-        run: docker compose up --build -d
+    deploy:
+        runs-on: self-hosted
+        steps:
+        - name: Checkout files
+          uses: Bhacaz/checkout-files@v2
+          with:
+            branch: dev
+            files: compose.yml database-image
+        - name: Deploy
+          run: |
+            docker compose pull
+            docker compose up -d
+            docker system prune -af
