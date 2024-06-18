@@ -1,22 +1,16 @@
 version: "3"
 services:
   service-discovery:
-    image: "service-discovery"
+    image: "serhiibabanov/service-discovery:latest"
     container_name: "service-discovery"
-    build:
-      context: ./service-discovery
-      dockerfile: "Dockerfile"
     ports:
       - "8761:8761"
     restart: on-failure
     networks:
       - pottery_store
   backend-gateway:
-    image: "backend-gateway"
+    image: "serhiibabanov/backend-gateway:latest"
     container_name: "backend-gateway"
-    build:
-      context: ./backend-gateway
-      dockerfile: "Dockerfile"
     environment:
         - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://service-discovery:8761/eureka
     ports:
@@ -27,11 +21,8 @@ services:
     networks:
       - pottery_store
   service-products:
-    image: "service-products"
+    image: "serhiibabanov/service-products:latest"
     container_name: "service-products"
-    build:
-      context: ./service-products
-      dockerfile: "Dockerfile"
     environment:
       - DATABASE_URL=jdbc:postgresql://database:5432/potterystore
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://service-discovery:8761/eureka
@@ -58,11 +49,8 @@ services:
     networks:
       - pottery_store
   docs:
-    image: "docs"
+    image: "serhiibabanov/docs:latest"
     container_name: "docs"
-    build:
-      context: ./docs
-      dockerfile: "Dockerfile"
     environment:
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://service-discovery:8761/eureka
     ports:
