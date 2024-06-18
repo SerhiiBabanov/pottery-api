@@ -36,3 +36,7 @@ dependencyManagement {
 tasks.withType<Test> {
 	useJUnitPlatform()
 }
+
+tasks.bootBuildImage {
+	imageName = "serhiibabanov/service-discovery"
+}
