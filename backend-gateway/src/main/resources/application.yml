@@ -30,6 +30,10 @@ spring:
           uri: lb://service-products
           predicates:
             - Path=/api/collections/**
+        - id: service-docs-id
+          uri: lb://docs
+          predicates:
+              - Path=/docs/**
 
 eureka:
   client:
