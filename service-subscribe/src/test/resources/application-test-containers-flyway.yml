@@ -1,0 +1,16 @@
+spring:
+  datasource:
+    url: jdbc:tc:postgresql:13:///test_database
+    username: user
+    password: password
+    driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
+  flyway:
+    locations: /db/{vendor}/common, /db/{vendor}/test
+
+eureka:
+  client:
+    enabled: false
+
+dev-server:
+  scheme: http
+  host: www.logicnsolution.com

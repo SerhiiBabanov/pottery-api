@@ -21,6 +21,15 @@ jobs:
         working-directory: service-products
       - name: Copy generated-snippets
         run: cp -rf service-products/build/generated-snippets/* docs/src/generated-snippets/
+        #generate and copy snippets from service-subscribe
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
+        working-directory: service-subscribe
+      - name: Execute Gradle tests
+        run: ./gradlew test
+        working-directory: service-subscribe
+      - name: Copy generated-snippets
+        run: cp -rf service-subscribe/build/generated-snippets/* docs/src/generated-snippets/
         #generate docs
       - name: Make gradlew executable
         run: chmod +x ./gradlew

@@ -34,6 +34,14 @@ spring:
           uri: lb://docs
           predicates:
               - Path=/docs/**
+        - id: service-subscribe-id
+          uri: lb://service-subscribe
+          predicates:
+            - Path=/api/subscribe
+        - id: service-unsubscribe-id
+          uri: lb://service-subscribe
+          predicates:
+            - Path=/api/unsubscribe
 
 eureka:
   client:
