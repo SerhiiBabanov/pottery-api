@@ -7,8 +7,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
+import org.springframework.restdocs.restassured.RestDocumentationFilter;
 import org.springframework.test.context.ActiveProfiles;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
@@ -23,24 +25,32 @@ import static org.springframework.restdocs.restassured.RestAssuredRestDocumentat
 public class BaseIntegrationDocumentationTest {
 
     @Value("${dev-server.host}")
-    private String devServerHost;
+    protected String devServerHost;
     @Value("${dev-server.scheme}")
-    private String devServerScheme;
+    protected String devServerScheme;
+
+    @LocalServerPort
+    protected Integer port;
 
     protected RequestSpecification documentationSpec;
 
-    protected void setDocumentationSpec(RestDocumentationContextProvider restDocumentation,
-                                              String documentationName) {
+    @BeforeEach
+    protected void setDocumentationSpec(RestDocumentationContextProvider restDocumentation) {
+        RestAssured.baseURI = "http://localhost:" + port;
         this.documentationSpec = new RequestSpecBuilder()
                 .addFilter(documentationConfiguration(restDocumentation)
                         .operationPreprocessors()
                         .withRequestDefaults(prettyPrint())
                         .withResponseDefaults(prettyPrint()))
-                .addFilter(document(documentationName, preprocessRequest(
-                        modifyUris()
-                                .scheme(devServerScheme)
-                                .host(devServerHost)
-                                .removePort())))
+
                 .build();
+    }
+
+    protected RestDocumentationFilter getModifyUrlFilter(String documentationName) {
+        return document(documentationName, preprocessRequest(
+                modifyUris()
+                        .scheme(devServerScheme)
+                        .host(devServerHost)
+                        .removePort()));
     }
 }
