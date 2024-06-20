@@ -15,7 +15,7 @@ To run the project, use the following command:
 
 ```bash
 docker compose up -d
-
+```
 This will start all the services. You can access the API through the backend-gateway service at http://localhost:8080.  
 
 Documentation
