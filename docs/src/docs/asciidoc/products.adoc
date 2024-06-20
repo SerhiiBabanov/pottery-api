@@ -1,0 +1,41 @@
+[[products]]
+= Products
+
+[[products-index-access]]
+== Accessing all products with pagination and filtering options with short description
+
+A `GET` request is used to access the CRUD read
+
+=== Request structure
+
+include::{snippets}/products/http-request.adoc[]
+
+=== Request parameters
+
+include::{snippets}/products/query-parameters.adoc[]
+
+=== Example response body
+
+include::{snippets}/products/response-body.adoc[]
+
+=== CURL request
+
+include::{snippets}/products/curl-request.adoc[]
+
+[[products-index-access-by-id]]
+== Accessing the products by ID with full description
+
+A `GET` request is used to get a single product
+
+=== Request structure
+
+include::{snippets}/product/http-request.adoc[]
+include::{snippets}/product/path-parameters.adoc[]
+
+=== Example response body
+
+include::{snippets}/product/response-body.adoc[]
+
+=== CURL request
+
+include::{snippets}/product/curl-request.adoc[]

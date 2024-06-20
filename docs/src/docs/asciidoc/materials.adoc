@@ -1,0 +1,23 @@
+[[materials]]
+= Materials
+
+[[materials-index-access]]
+== Accessing the materials
+
+A `GET` request is used to access the CRUD read
+
+=== Request structure
+
+include::{snippets}/materials/http-request.adoc[]
+
+=== Example response body
+
+include::{snippets}/materials/response-body.adoc[]
+
+=== Response fields
+
+include::{snippets}/materials/response-fields.adoc[]
+
+=== CURL request
+
+include::{snippets}/materials/curl-request.adoc[]

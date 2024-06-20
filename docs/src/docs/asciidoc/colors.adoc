@@ -1,0 +1,23 @@
+[[colors]]
+= Colors
+
+[[colors-index-access]]
+== Accessing the colors
+
+A `GET` request is used to access the CRUD read
+
+=== Request structure
+
+include::{snippets}/colors/http-request.adoc[]
+
+=== Example response body
+
+include::{snippets}/colors/response-body.adoc[]
+
+=== Response fields
+
+include::{snippets}/colors/response-fields.adoc[]
+
+=== CURL request
+
+include::{snippets}/colors/curl-request.adoc[]

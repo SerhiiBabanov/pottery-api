@@ -1,13 +1,13 @@
-package com.pottery.service.products;
+package com.pottery.docs;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class ServiceProductsApplicationTests {
+class DocsApplicationTests {
 
-	@Test
-	void contextLoads() {
-	}
+    @Test
+    void contextLoads() {
+    }
 
 }

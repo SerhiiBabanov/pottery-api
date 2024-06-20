@@ -1,0 +1,23 @@
+[[categories]]
+= Categories
+
+[[categories-index-access]]
+== Accessing the categories
+
+A `GET` request is used to access the CRUD read
+
+=== Request structure
+
+include::{snippets}/categories/http-request.adoc[]
+
+=== Example response-body
+
+include::{snippets}/categories/response-body.adoc[]
+
+=== Response fields
+
+include::{snippets}/categories/response-fields.adoc[]
+
+=== CURL request
+
+include::{snippets}/categories/curl-request.adoc[]
