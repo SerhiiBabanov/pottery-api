@@ -10,9 +10,9 @@ A `GET` request is used to access the CRUD read
 
 include::{snippets}/categories/http-request.adoc[]
 
-=== Example response
+=== Example response-body
 
-include::{snippets}/categories/http-response.adoc[]
+include::{snippets}/categories/response-body.adoc[]
 
 === Response fields
 
