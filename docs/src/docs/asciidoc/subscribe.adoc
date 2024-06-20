@@ -1,0 +1,44 @@
+[[subscription]]
+= Subscription
+
+[[subscription-index-create]]
+== Subscribing users
+
+A `POST` request is used to subscribe a user to the newsletter
+
+=== Request structure
+
+include::{snippets}/subscribe/http-request.adoc[]
+
+=== Request parameters
+
+include::{snippets}/subscribe/query-parameters.adoc[]
+
+=== Example http response
+
+include::{snippets}/subscribe/http-response.adoc[]
+
+=== CURL request
+
+include::{snippets}/subscribe/curl-request.adoc[]
+
+[[subscription-index-unsubscribe]]
+== Unsubscribing users
+
+A `POST` request is used to unsubscribe a user from the newsletter
+
+=== Request structure
+
+include::{snippets}/unsubscribe/http-request.adoc[]
+
+=== Request parameters
+
+include::{snippets}/unsubscribe/query-parameters.adoc[]
+
+=== Example http response
+
+include::{snippets}/unsubscribe/http-response.adoc[]
+
+=== CURL request
+
+include::{snippets}/unsubscribe/curl-request.adoc[]
