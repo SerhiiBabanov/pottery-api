@@ -1,0 +1,45 @@
+[[collections]]
+= Collections
+
+[[collections-index-access]]
+== Accessing the collections
+
+A `GET` request is used to access the CRUD read
+
+=== Request structure
+
+include::{snippets}/collections/http-request.adoc[]
+
+=== Example response
+
+include::{snippets}/collections/http-response.adoc[]
+
+=== Response fields
+
+include::{snippets}/collections/response-fields.adoc[]
+
+=== CURL request
+
+include::{snippets}/collections/curl-request.adoc[]
+
+[[collections-index-get-one]]
+== Get one collection
+
+A `GET` request is used to get a single collection
+
+=== Request structure
+
+include::{snippets}/collection/http-request.adoc[]
+include::{snippets}/collection/path-parameters.adoc[]
+
+=== Example response-body
+
+include::{snippets}/collection/response-body.adoc[]
+
+=== Response fields
+
+include::{snippets}/collection/response-fields.adoc[]
+
+=== CURL request
+
+include::{snippets}/collection/curl-request.adoc[]

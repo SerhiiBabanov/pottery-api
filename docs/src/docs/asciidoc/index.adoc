@@ -1,0 +1,17 @@
+= API Guide;
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 4
+:sectlinks:
+
+[[abstract]]
+
+Document RESTful services by combining hand-written documentation with auto-generated snippets produced with Spring MVC Test or WebTestClient.
+
+include::categories.adoc[]
+include::collections.adoc[]
+include::materials.adoc[]
+include::colors.adoc[]
+include::products.adoc[]

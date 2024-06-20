@@ -37,3 +37,7 @@ dependencyManagement {
 tasks.withType<Test> {
 	useJUnitPlatform()
 }
+
+tasks.bootBuildImage {
+	imageName = "serhiibabanov/backend-gateway"
+}

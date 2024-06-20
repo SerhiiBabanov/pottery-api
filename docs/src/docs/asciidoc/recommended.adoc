@@ -1,0 +1,23 @@
+[[recommended]]
+= Recommended products
+
+[[recommended-index-access]]
+== Accessing the recommended products
+
+A `GET` request is used to access the CRUD read
+
+=== Request structure
+
+include::{snippets}/recommended/http-request.adoc[]
+
+=== Request parameters
+
+include::{snippets}/recommended/query-parameters.adoc[]
+
+=== Example response
+
+include::{snippets}/recommended/http-response.adoc[]
+
+=== CURL request
+
+include::{snippets}/products/curl-request.adoc[]

@@ -1,0 +1,41 @@
+name: publish docs
+on:
+  push:
+    branches: [ 'dev' ]
+    paths: [ 'docs/**' ]
+
+jobs:
+  generate_docs:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          ref: dev
+        #generate and copy snippets from service-products
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
+        working-directory: service-products
+      - name: Execute Gradle tests
+        run: ./gradlew test
+        working-directory: service-products
+      - name: Copy generated-snippets
+        run: cp -rf service-products/build/generated-snippets/* docs/src/generated-snippets/
+        #generate docs
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
+        working-directory: docs
+      - name: Generate docs
+        run: ./gradlew asciidoctor
+        working-directory: docs
+        #publish docs
+      - name: Execute Gradle bootBuildImage
+        run: ./gradlew bootBuildImage
+        working-directory: docs
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Push Docker image to Docker Hub
+        run: docker push serhiibabanov/docs:latest
