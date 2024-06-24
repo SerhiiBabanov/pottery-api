@@ -1,6 +1,6 @@
 # Pottery API
 
-This is the API for the Pottery Store project. It's built with Java, Spring Boot, Kotlin, Gradle, and SQL.
+The pottery-api project is a microservices-based application for a Pottery Store. It's built using Java, Spring Boot, Gradle, and SQL.
 
 ## Services
 
@@ -8,6 +8,7 @@ The project consists of several services:
 
 - `service-products`: Handles all operations related to products.
 - `docs`: Handles the generation and serving of documentation.
+- `service-subscribe`: This service handles subscription-related operations.
 
 ## Running the Project
 
