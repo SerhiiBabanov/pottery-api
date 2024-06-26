@@ -33,6 +33,8 @@ dependencies {
     implementation("org.flywaydb:flyway-core")
     implementation("org.flywaydb:flyway-database-postgresql")
     implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")
+    implementation("org.mapstruct:mapstruct:1.5.5.Final")
+    annotationProcessor("org.mapstruct:mapstruct-processor:1.5.5.Final")
     compileOnly("org.projectlombok:lombok")
     runtimeOnly("org.postgresql:postgresql")
     annotationProcessor("org.projectlombok:lombok")
@@ -64,6 +66,7 @@ tasks.asciidoctor {
     dependsOn(tasks.test)
 }
 
+
 tasks.bootBuildImage {
-    imageName = "serhiibabanov/service-subscribe"
+    imageName = "serhiibabanov/service-support"
 }
