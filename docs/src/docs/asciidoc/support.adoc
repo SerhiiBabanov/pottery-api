@@ -1,0 +1,23 @@
+[[support]]
+= Support requests from users
+
+[[support-index-create]]
+== Support requests from users
+
+A `POST` request is used to send a support request from a user
+
+=== Request structure
+
+include::{snippets}/support/http-request.adoc[]
+
+=== Request body
+
+include::{snippets}/support/request-body.adoc[]
+
+=== Example http response
+
+include::{snippets}/support/http-response.adoc[]
+
+=== CURL request
+
+include::{snippets}/support/curl-request.adoc[]

@@ -48,6 +48,20 @@ services:
     restart: on-failure
     networks:
       - pottery_store
+  service-support:
+    image: "serhiibabanov/service-support:latest"
+    container_name: "service-support"
+    environment:
+      - DATABASE_URL=jdbc:postgresql://database:5432/potterystore
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://service-discovery:8761/eureka
+    ports:
+      - "8084:8084"
+    depends_on:
+      - database
+      - service-discovery
+    restart: on-failure
+    networks:
+      - pottery_store
   database:
     container_name: "database"
     build:
